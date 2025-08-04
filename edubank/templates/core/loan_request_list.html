@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - EduBank{% endblock %}
+
+{% block content %}
+    <h2>{{ title }}</h2>
+
+    {% if pending_loans %}
+        <table border="1" style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Institution</th>
+                    <th>Amount</th>
+                    <th>Date Requested</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in pending_loans %}
+                <tr>
+                    <td>{{ loan.student_account.user.username }}</td>
+                    <td>{{ loan.institution.name }}</td>
+                    <td>${{ loan.amount|floatformat:2 }}</td>
+                    <td>{{ loan.request_date|date:"Y-m-d H:i" }}</td>
+                    <td style="display: flex; gap: 5px;">
+                        <form action="{% url 'core:approve_loan' loan.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button" style="background-color: #4CAF50;">Approve</button>
+                        </form>
+                        <form action="{% url 'core:deny_loan' loan.id %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="button" style="background-color: #f44336;">Deny</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>There are no pending loan requests at this time.</p>
+    {% endif %}
+{% endblock %}

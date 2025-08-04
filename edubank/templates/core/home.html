@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to EduBank{% endblock %}
+
+{% block content %}
+    <h1>Welcome to EduBank</h1>
+    <p>The premier banking solution for students and educational institutions. Our mission is to provide a safe and controlled environment for students to learn about personal finance.</p>
+
+    <h2>For Students</h2>
+    <p>Learn to manage your money, make transfers, and even request small loans under the supervision of your teachers.</p>
+
+    <h2>For Educators</h2>
+    <p>Provide your students with a hands-on financial education tool. Manage student accounts, oversee loan requests, and customize the platform for your institution.</p>
+
+    {% if not user.is_authenticated %}
+        <p>Please <a href="{% url 'login' %}">login</a> to access your account.</p>
+    {% endif %}
+{% endblock %}
