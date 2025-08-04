@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Actualizar Perfil{% endblock %}
+
+{% block content %}
+    <h2>Actualizar Perfil</h2>
+
+    {% if user.profile_picture %}
+        <p>Foto de Perfil Actual:</p>
+        <img src="{{ user.profile_picture.url }}" alt="Foto de perfil de {{ user.username }}" style="max-width: 150px; height: auto; border-radius: 50%; margin-bottom: 1rem;">
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar Cambios</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - EduBank{% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ user.username }}!</h2>
+    <p>This is your EduBank dashboard. From here, you can access all your features.</p>
+
+    <h3>Your Roles:</h3>
+    {% if user_roles %}
+        <ul>
+        {% for role in user_roles %}
+            <li>
+                <strong>{{ role.get_role_display }}</strong>
+                {% if role.institution %}
+                    at <em>{{ role.institution.name }}</em>
+                    {% if role.role == 'lead_teacher' %}
+                        - <a href="{% url 'core:update_institution' role.institution.id %}">Customize Institution</a>
+                    {% endif %}
+                {% else %}
+                    (System-wide)
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have not been assigned any roles yet. Please contact an administrator.</p>
+    {% endif %}
+
+    <hr>
+
+    <h3>General Actions:</h3>
+    <ul>
+        <li><a href="{% url 'password_change' %}">Change Password</a></li>
+        <li><a href="{% url 'core:update_profile' %}">Edit Profile</a></li>
+    </ul>
+
+    {% if 'administrator' in role_names %}
+    <hr>
+    <h3>Administrator Actions:</h3>
+    <ul>
+        <li><a href="{% url 'core:create_institution' %}">Create New Institution</a></li>
+        <li><a href="{% url 'core:create_lead_teacher' %}">Create New Lead Teacher</a></li>
+    </ul>
+    {% endif %}
+
+    {% if 'lead_teacher' in role_names %}
+    <hr>
+    <h3>Lead Teacher Actions:</h3>
+    <ul>
+        <li><a href="{% url 'core:create_teacher' %}">Create New Teacher</a></li>
+    </ul>
+    {% endif %}
+
+    {% if 'teacher' in role_names or 'lead_teacher' in role_names %}
+    <hr>
+    <h3>Teacher Actions:</h3>
+    <ul>
+        <li><a href="{% url 'core:create_student' %}">Create New Student</a></li>
+        <li><a href="{% url 'core:loan_request_list' %}">Review Pending Loans</a></li>
+    </ul>
+    {% endif %}
+
+    {% if 'student' in role_names %}
+    <hr>
+    <h3>Student Actions:</h3>
+    <ul>
+        <li><a href="{% url 'core:request_loan' %}">Request a Loan</a></li>
+        <li><a href="{% url 'core:transfer_money' %}">Transfer Money</a></li>
+    </ul>
+    {% endif %}
+
+{% endblock %}
